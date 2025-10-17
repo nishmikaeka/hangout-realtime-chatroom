@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  mongoose.connection.on("connected", () => console.log("Database Connected"));
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
 
-  await mongoose.connect(`${process.env.MONGODB_URI}/hangout_chatroom_app`);
+    console.log(`Connected to database: ${mongoose.connection.name}`);
+  } catch (err) {
+    console.error("Database connection error:", err.message);
+  }
 };
 
 export default connectDB;
