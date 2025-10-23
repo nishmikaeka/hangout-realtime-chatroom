@@ -2,6 +2,7 @@ import roomModel from "../models/roomModel.js";
 import userModel from "../models/userModels.js";
 import { generateRoomId } from "../utils/idGenerator.js";
 import transporter from "../config/nodeMailer.js";
+import { getActiveRoomCount } from "../socket/stateManager.js";
 
 export const createRoom = async (req, res) => {
   const DEFAULT_DURATION_TIME = 30; // default duration in minutes
@@ -87,7 +88,7 @@ export const getRoomDetails = async (req, res) => {
         host: room.hostId,
         description: room.description,
         participants: room.participants,
-        expireTime: room.expiryTime,
+        expiryTime: room.expiryTime,
         maxParticipants: room.maxParticipants,
         allowImages: room.allowImages,
       },
@@ -101,17 +102,26 @@ export const joinRoom = async (req, res) => {
   const { userName, roomId } = req.body;
 
   if (!userName || !roomId) {
-    return res.json({ success: false, message: "Missing details" });
+    return res.status(400).json({ success: false, message: "Missing details" });
   }
 
   try {
-    const room = await roomModel.findOne({ roomId: roomId });
+    const room = await roomModel.findOne({ roomId });
 
-    if (!room || room.expireTime < Date.now()) {
-      return res.json({ success: false, message: "Room not found" });
+    if (!room || room.expiryTime < Date.now()) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Room not found" });
     }
 
     //implement the maxParticipant count using socket.io here after configuring it
+    const currentTotalParticipants = getActiveRoomCount(roomId);
+    if (
+      room.maxParticipants > 0 &&
+      currentTotalParticipants >= room.maxParticipants
+    ) {
+      return res.status(403).json({ success: false, message: "Room is full" });
+    }
 
     return res.json({
       success: true,
