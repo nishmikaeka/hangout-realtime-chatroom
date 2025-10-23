@@ -8,6 +8,7 @@ import userRouter from "./routes/userRoutes.js";
 import roomRouter from "./routes/roomRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
+import { activeRooms, getActiveRoomCount } from "./socket/stateManager.js";
 
 const app = express();
 const port = process.env.port || 4000;
@@ -22,7 +23,7 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -35,6 +36,8 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log(`${userName} joined ${roomId}`);
     socket.to(roomId).emit("user joined", `${userName} joined the chat`);
+    if (!activeRooms[roomId]) activeRooms[roomId] = {};
+    activeRooms[roomId][socket.id] = userName; // <-- Update the map
   });
 
   //send message
@@ -50,6 +53,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
+    delete activeRooms[roomId][socket.id]; // <-- Cleanup the map
   });
 });
 
@@ -59,4 +63,4 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/room", roomRouter);
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+server.listen(port, () => console.log(`Server started on port ${port}`));
