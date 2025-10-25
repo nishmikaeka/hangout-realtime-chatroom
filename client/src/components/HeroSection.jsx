@@ -1,0 +1,103 @@
+import React, { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
+
+const HeroSection = () => {
+  const navigate = useNavigate();
+  const { userData } = useContext(AppContext);
+
+  return (
+    <div className="absolute inset-0 -z-10 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+      {/* Navbar */}
+      <section>
+        <div className="w-full flex justify-between items-center p-4 sm:px-20">
+          {/* Logo */}
+          <div className="flex justify-between items-center w-full">
+            <div>
+              <img
+                src="/full_logo.svg"
+                alt="logo"
+                className="w-32 sm:w-36 h-auto"
+              />
+            </div>
+            <button
+              onClick={() => navigate("/login")}
+              className="cursor-pointer font-medium sm:hidden text-sm hover:text-ghost"
+            >
+              Login
+            </button>
+          </div>
+
+          {/* Nav Links (hidden on mobile) */}
+          <div className="hidden sm:flex w-full justify-end items-center gap-6 text-[#2c2c2c]">
+            <button className="cursor-pointer text-sm hover:text-ghost">
+              Create a Room
+            </button>
+            <button className="cursor-pointer text-sm hover:text-ghost">
+              Join a Room
+            </button>
+
+            {userData ? (
+              <div className="relative w-8 h-8 flex justify-center items-center bg-gray-100 rounded-full font-semibold text-sm">
+                {userData.name[0].toUpperCase()}
+                <div className="absolute top-10 right-0 bg-white shadow-md rounded-md hidden group-hover:block">
+                  <ul className="text-xs text-gray-700">
+                    <li className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Verify Email
+                    </li>
+                    <li className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Log Out
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="cursor-pointer text-sm hover:text-ghost"
+              >
+                Login
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Hero Section */}
+      <section className="flex flex-col-reverse lg:flex-row gap-10 sm:px-20 p-4 items-center text-center sm:text-left">
+        {/* Left Side (Text) */}
+        <div className="w-full lg:w-6/12 sm:ml-20">
+          <h1 className="text-3xl sm:text-4xl font-semibold leading-snug sm:leading-[2.75rem] mt-5">
+            Create Instant <span className="text-ghost">Chatrooms</span>{" "}
+            <br className="hidden sm:block" />
+            For Events, Friends <br className="hidden sm:block" /> or Teams
+          </h1>
+          <h2 className="text-gray-600 mt-3 text-sm sm:text-md max-w-md mx-auto sm:mx-0">
+            Create temporary chatrooms, share a link or QR, and chat instantly
+            with anyone—no signup needed.
+          </h2>
+
+          <div className="flex flex-col sm:flex-row gap-3 mt-5 justify-center sm:justify-start">
+            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45">
+              Create a Chatroom
+            </button>
+            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45">
+              Join a Chatroom
+            </button>
+          </div>
+        </div>
+
+        {/* Right Side (Image) — hidden on small screens, BIGGER now */}
+        <div className="w-full lg:w-6/12 h-auto hidden sm:block">
+          <img
+            src="/hero_bg.png"
+            alt="hero_bg"
+            className="w-full h-auto scale-110 lg:scale-125"
+          />
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default HeroSection;
