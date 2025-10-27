@@ -1,10 +1,41 @@
 import React, { useContext } from "react";
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../context/AppContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { userData } = useContext(AppContext);
+  const { userData, backendUrl, setIsLoggedIn, setUserData } =
+    useContext(AppContext);
+
+  const logOut = async () => {
+    try {
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      data.success && setIsLoggedIn(false);
+      data.success && setUserData(false);
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const sendVerificationOtp = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/send-verify-otp"
+      );
+      if (data.success) {
+        navigate("/email-verify");
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="absolute inset-0 -z-10 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
@@ -41,12 +72,20 @@ const HeroSection = () => {
               <div className="relative w-8 h-8 flex justify-center items-center bg-gray-100 rounded-full font-semibold text-sm">
                 {userData.name[0].toUpperCase()}
                 <div className="absolute top-10 right-0 bg-white shadow-md rounded-md hidden group-hover:block">
-                  <ul className="text-xs text-gray-700">
-                    <li className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Verify Email
-                    </li>
-                    <li className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Log Out
+                  <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
+                    {!userData.isAccountVerified && (
+                      <li
+                        onClick={sendVerificationOtp}
+                        className="py-1 px-2 hover:bg-gray-200 cursor-pointer"
+                      >
+                        Verify Email
+                      </li>
+                    )}
+                    <li
+                      onClick={logOut}
+                      className="py-1 px-2 hover:bg-gray-200 cursor-pointer pr-10"
+                    >
+                      LogOut
                     </li>
                   </ul>
                 </div>
