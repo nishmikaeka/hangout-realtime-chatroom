@@ -112,7 +112,7 @@ export const sendVerifyOtp = async (req, res) => {
     const otp = Math.floor(10000 + Math.random() * 900000);
 
     user.verifyOtp = otp;
-    user.verifyOtpExpiresAt = Date.now() + 24 * 60 * 60 * 1000;
+    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
 
     await user.save();
 
@@ -147,6 +147,7 @@ export const verifyEmail = async (req, res) => {
       return res.json({ success: false, message: "Invalid OTP" });
     }
     if (user.verifyOtpExpireAt < Date.now()) {
+      console.log(user.verifyOtpExpireAt);
       return res.json({ success: false, message: "OTP expired" });
     }
 

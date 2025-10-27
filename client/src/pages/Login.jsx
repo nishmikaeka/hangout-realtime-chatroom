@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { backendUrl, setIsLoggedIn, getUserData } = useContext(AppContext);
 
-  const [userState, setUserState] = useState("Sign Up"); // "Login" or "Sign Up"
+  const [userState, setUserState] = useState("Login"); // "Login" or "Sign Up"
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
