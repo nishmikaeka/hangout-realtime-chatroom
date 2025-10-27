@@ -67,7 +67,7 @@ const Login = () => {
             src="/full_logo.svg"
             alt="Hangout Logo"
             onClick={() => navigate("/home")}
-            className="h-10 sm:h-8"
+            className="h-13 sm:h-8"
           />
         </div>
 
