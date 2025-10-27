@@ -51,11 +51,41 @@ const HeroSection = () => {
                 className="w-32 sm:w-36 h-auto"
               />
             </div>
+            {/*Mobile view*/}
             <button
               onClick={() => navigate("/login")}
               className="cursor-pointer font-medium sm:hidden text-sm hover:text-ghost"
             >
-              Login
+              {userData ? (
+                <div className="w-8 h-8 flex justify-center items-center rounded-full bg-black text-white relative group">
+                  {userData.name[0].toUpperCase()}
+                  <div className="absolute hidden group-hover:block top-0 -right-6 z-10 text-black rounded-3xl pt-10">
+                    <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
+                      {!userData.isAccountVerified && (
+                        <li
+                          onClick={sendVerificationOtp}
+                          className="py-1 px-2 text-xs hover:bg-gray-200 cursor-pointer"
+                        >
+                          Verify Email
+                        </li>
+                      )}
+                      <li
+                        onClick={logOut}
+                        className="py-1 px-2 hover:bg-gray-200 text-xs cursor-pointer pr-10"
+                      >
+                        LogOut
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => navigate("/login")}
+                  className="cursor-pointer text-sm hover:text-ghost"
+                >
+                  Login
+                </button>
+              )}
             </button>
           </div>
 
@@ -69,9 +99,9 @@ const HeroSection = () => {
             </button>
 
             {userData ? (
-              <div className="relative w-8 h-8 flex justify-center items-center bg-gray-100 rounded-full font-semibold text-sm">
+              <div className="w-8 h-8 flex justify-center items-center rounded-full bg-black text-white relative group">
                 {userData.name[0].toUpperCase()}
-                <div className="absolute top-10 right-0 bg-white shadow-md rounded-md hidden group-hover:block">
+                <div className="absolute hidden group-hover:block top-0 right-o z-10 text-black rounded-3xl pt-10">
                   <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
                     {!userData.isAccountVerified && (
                       <li

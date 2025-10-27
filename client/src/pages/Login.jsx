@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { backendUrl, setIsLoggedIn, getUserData } = useContext(AppContext);
 
-  const [userState, setUserState] = useState("Sign Up"); // "Login" or "Sign Up"
+  const [userState, setUserState] = useState("Login"); // "Login" or "Sign Up"
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +67,7 @@ const Login = () => {
             src="/full_logo.svg"
             alt="Hangout Logo"
             onClick={() => navigate("/home")}
-            className="h-10 sm:h-8"
+            className="h-13 sm:h-8"
           />
         </div>
 
