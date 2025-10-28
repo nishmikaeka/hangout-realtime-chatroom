@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppContext } from "../context/AppContext.jsx";
+import AppContext from "../context/AppContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -52,10 +52,7 @@ const HeroSection = () => {
               />
             </div>
             {/*Mobile view*/}
-            <button
-              onClick={() => navigate("/login")}
-              className="cursor-pointer font-medium sm:hidden text-sm hover:text-ghost"
-            >
+            <div className="cursor-pointer font-medium sm:hidden text-sm hover:text-ghost">
               {userData ? (
                 <div className="w-8 h-8 flex justify-center items-center rounded-full bg-black text-white relative group">
                   {userData.name[0].toUpperCase()}
@@ -86,7 +83,7 @@ const HeroSection = () => {
                   Login
                 </button>
               )}
-            </button>
+            </div>
           </div>
 
           {/* Nav Links (hidden on mobile) */}
