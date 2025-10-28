@@ -75,8 +75,8 @@ export const login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -90,8 +90,8 @@ export const logOut = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
     return res.json({ success: true, message: "Logged out successfully" });
   } catch (error) {
@@ -243,6 +243,7 @@ export const resetPassword = async (req, res) => {
 
 export const isAuthenticated = async (req, res) => {
   try {
+    return res.json({ success: true });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
