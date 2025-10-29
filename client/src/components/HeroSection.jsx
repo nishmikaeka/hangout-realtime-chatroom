@@ -54,21 +54,21 @@ const HeroSection = () => {
             {/*Mobile view*/}
             <div className="cursor-pointer font-medium sm:hidden text-sm hover:text-ghost">
               {userData ? (
-                <div className="w-8 h-8 flex justify-center items-center rounded-full bg-black text-white relative group">
-                  {userData.name[0].toUpperCase()}
-                  <div className="absolute hidden group-hover:block top-0 -right-6 z-10 text-black rounded-3xl pt-10">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center cursor-pointer relative group ">
+                  <img src="/avatar.png" alt="Avatar" />
+                  <div className="absolute hidden group-hover:block top-0 right-o z-10 text-black rounded-3xl pt-10">
                     <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
                       {!userData.isAccountVerified && (
                         <li
                           onClick={sendVerificationOtp}
-                          className="py-1 px-2 text-xs hover:bg-gray-200 cursor-pointer"
+                          className="py-1 px-2 hover:bg-gray-200 cursor-pointer"
                         >
                           Verify Email
                         </li>
                       )}
                       <li
                         onClick={logOut}
-                        className="py-1 px-2 hover:bg-gray-200 text-xs cursor-pointer pr-10"
+                        className="py-1 px-2 hover:bg-gray-200 cursor-pointer pr-10"
                       >
                         LogOut
                       </li>
@@ -88,7 +88,10 @@ const HeroSection = () => {
 
           {/* Nav Links (hidden on mobile) */}
           <div className="hidden sm:flex w-full justify-end items-center gap-6 text-[#2c2c2c]">
-            <button className="cursor-pointer text-sm hover:text-ghost">
+            <button
+              className="cursor-pointer text-sm hover:text-ghost"
+              onClick={() => navigate("/create-chatroom")}
+            >
               Create a Room
             </button>
             <button className="cursor-pointer text-sm hover:text-ghost">
@@ -96,8 +99,8 @@ const HeroSection = () => {
             </button>
 
             {userData ? (
-              <div className="w-8 h-8 flex justify-center items-center rounded-full bg-black text-white relative group">
-                {userData.name[0].toUpperCase()}
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center cursor-pointer relative group ">
+                <img src="/avatar.png" alt="Avatar" />
                 <div className="absolute hidden group-hover:block top-0 right-o z-10 text-black rounded-3xl pt-10">
                   <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
                     {!userData.isAccountVerified && (
@@ -144,10 +147,13 @@ const HeroSection = () => {
           </h2>
 
           <div className="flex flex-col sm:flex-row gap-3 mt-5 justify-center sm:justify-start">
-            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45">
+            <button
+              className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45 cursor-pointer"
+              onClick={() => navigate("/create-chatroom")}
+            >
               Create a Chatroom
             </button>
-            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45">
+            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45 cursor-pointer">
               Join a Chatroom
             </button>
           </div>

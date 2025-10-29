@@ -54,7 +54,7 @@ const Login = () => {
         <img
           src="/full_mono_logo.png"
           alt="Hangout Logo"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/")}
           className="h-30 mb-1 cursor-pointer"
         />
       </div>
