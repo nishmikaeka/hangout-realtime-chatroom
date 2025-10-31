@@ -26,10 +26,19 @@ const Login = () => {
         });
 
         if (data.success) {
+          // ✅ Store user data in localStorage
+          if (data.user) {
+            localStorage.setItem("userId", data.user.id);
+            localStorage.setItem("userName", data.user.name);
+            console.log("Stored userId:", data.user.id);
+          }
+
           setIsLoggedIn(true);
           getUserData();
           navigate("/");
-        } else toast.error(data.message);
+        } else {
+          toast.error(data.message);
+        }
       } else {
         const { data } = await axios.post(`${backendUrl}/api/auth/login`, {
           email,
@@ -37,10 +46,19 @@ const Login = () => {
         });
 
         if (data.success) {
+          // ✅ Store user data in localStorage
+          if (data.user) {
+            localStorage.setItem("userId", data.user.id);
+            localStorage.setItem("userName", data.user.name);
+            console.log("Stored userId:", data.user.id);
+          }
+
           setIsLoggedIn(true);
           getUserData();
           navigate("/");
-        } else toast.error(data.message);
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error) {
       toast.error(error.message);

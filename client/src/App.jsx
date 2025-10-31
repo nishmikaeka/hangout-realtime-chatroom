@@ -8,6 +8,7 @@ import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import CreateChatroom from "./pages/CreateChatroom";
 import AppContext from "./context/AppContext";
+import Chatroom from "./pages/Chatroom";
 
 const App = () => {
   const ProtectedRoute = ({ children }) => {
@@ -40,6 +41,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/chatroom/:roomId" element={<Chatroom />} />
       </Routes>
     </div>
   );
