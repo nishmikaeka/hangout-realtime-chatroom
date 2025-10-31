@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const CreateChatroom = () => {
   const navigate = useNavigate();
-  const { backendUrl } = useContext(AppContext);
+  const { backendUrl, isLoggedIn } = useContext(AppContext);
 
   const [roomName, setRoomName] = useState("");
   const [description, setDescription] = useState("");
@@ -19,6 +19,13 @@ const CreateChatroom = () => {
     e.preventDefault();
 
     try {
+      // Safety check: If no token exists, the user isn't logged in
+      if (!isLoggedIn) {
+        toast.error("You must be logged in to create a chatroom.");
+        navigate("/login"); // Redirect to login
+        return;
+      }
+
       const chatRoomData = {
         roomName,
         description,
@@ -29,26 +36,31 @@ const CreateChatroom = () => {
 
       const { data } = await axios.post(
         backendUrl + "/api/room/create",
-        chatRoomData
+        chatRoomData,
+        {
+          withCredentials: true,
+        }
       );
 
       if (data.success) {
         toast.success(data.message || "Chatroom created successfully!");
+        navigate(`/chatroom/${data.room.roomId}`);
       } else {
         toast.error(data.message || "Failed to create the chatroom!");
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response && error.response.status === 401) {
+        toast.error("Session expired or unauthorized. Please log in again.");
+        navigate("/login");
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            error.message ||
+            "An unknown error occurred."
+        );
+      }
       console.error("Chatroom creation error", error);
     }
-
-    console.log({
-      roomName,
-      description,
-      allowImages,
-      duration,
-      maxParticipants,
-    });
   };
 
   return (
@@ -126,7 +138,7 @@ const CreateChatroom = () => {
                   onChange={(e) => setAllowImages(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#9074DB]"></div>
+                <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#9074DB]"></div>
               </label>
             </div>
           </div>
@@ -164,7 +176,6 @@ const CreateChatroom = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            onClick={() => navigate("/chatroom")}
             className="w-full text-white rounded-xl py-2 sm:py-3 bg-[#9074DB] hover:bg-[#7B5FCA] transition-colors duration-200 font-medium shadow-lg text-sm sm:text-base"
           >
             Create a chatroom

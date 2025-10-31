@@ -38,7 +38,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="absolute inset-0 -z-10 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+    <div className="absolute inset-0 -z-10 min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px]">
       {/* Navbar */}
       <section>
         <div className="w-full flex justify-between items-center p-4 sm:px-20">
@@ -136,7 +136,7 @@ const HeroSection = () => {
       <section className="flex flex-col-reverse lg:flex-row gap-10 sm:px-20 p-4 items-center text-center sm:text-left">
         {/* Left Side (Text) */}
         <div className="w-full lg:w-6/12 sm:ml-20">
-          <h1 className="text-3xl sm:text-4xl font-semibold leading-snug sm:leading-[2.75rem] mt-5">
+          <h1 className="text-3xl sm:text-4xl font-semibold leading-snug sm:leading-11 mt-5">
             Create Instant <span className="text-ghost">Chatrooms</span>{" "}
             <br className="hidden sm:block" />
             For Events, Friends <br className="hidden sm:block" /> or Teams
