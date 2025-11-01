@@ -3,11 +3,14 @@ import AppContext from "../context/AppContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useState } from "react";
+import JoinRoomModal from "./JoinRoomModal.jsx";
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const { userData, backendUrl, setIsLoggedIn, setUserData } =
     useContext(AppContext);
+  const [showJoinModal, setShowJoinModal] = useState(false);
 
   const logOut = async () => {
     try {
@@ -35,6 +38,9 @@ const HeroSection = () => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+  const handleJoinRoom = () => {
+    setShowJoinModal(true);
   };
 
   return (
@@ -94,7 +100,10 @@ const HeroSection = () => {
             >
               Create a Room
             </button>
-            <button className="cursor-pointer text-sm hover:text-ghost">
+            <button
+              onClick={handleJoinRoom}
+              className="cursor-pointer text-sm hover:text-ghost"
+            >
               Join a Room
             </button>
 
@@ -153,7 +162,10 @@ const HeroSection = () => {
             >
               Create a Chatroom
             </button>
-            <button className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45 cursor-pointer">
+            <button
+              onClick={handleJoinRoom}
+              className="bg-ghost text-sm text-white p-2 px-4 rounded-xl w-auto sm:w-45 cursor-pointer"
+            >
               Join a Chatroom
             </button>
           </div>
@@ -168,6 +180,11 @@ const HeroSection = () => {
           />
         </div>
       </section>
+      {/* Join Room Modal */}
+      <JoinRoomModal
+        isOpen={showJoinModal}
+        onClose={() => setShowJoinModal(false)}
+      />
     </div>
   );
 };
