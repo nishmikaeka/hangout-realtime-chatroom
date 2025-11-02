@@ -7,7 +7,7 @@ const roomSchema = new mongoose.Schema({
   description: { type: String, required: true },
   allowImages: { type: Boolean, default: false },
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-  maxParticipants: { type: Number, default: 0 },
+  maxParticipants: { type: Number, default: 5 },
   expiryTime: { type: Number, default: 0, required: true },
 });
 

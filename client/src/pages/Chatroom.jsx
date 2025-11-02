@@ -4,16 +4,23 @@ import { io } from "socket.io-client";
 import { Send, Menu, X } from "lucide-react";
 import InviteModal from "../components/InviteModal";
 import { toast } from "react-toastify";
+import { Upload } from "lucide-react";
+import { useContext } from "react";
+import axios from "axios";
+import AppContext from "../context/AppContext";
 
 const Chatroom = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName") || "Guest";
   const userId = localStorage.getItem("userId");
+  //get backendurl from global state manager
+  const { backendUrl } = useContext(AppContext);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [participants, setParticipants] = useState([]);
+  const [allowUploads, setAllowUploads] = useState(false);
   const [roomInfo, setRoomInfo] = useState({
     name: "",
     meetingId: "",
@@ -31,13 +38,62 @@ const Chatroom = () => {
   };
   useEffect(() => scrollToBottom(), [messages]);
 
-  // ✅ Debug participants updates
+  // Listen for roomInfo from server
   useEffect(() => {
-    console.log("🔄 Participants STATE changed! Count:", participants.length);
-    console.log("🔄 Full list:", participants);
-  }, [participants]);
+    if (!socket) return;
 
-  console.log("🎨 RENDER - Current participants count:", participants.length);
+    socket.on("roomInfo", (info) => {
+      setAllowUploads(info.allowUploads); // ✅ store it
+    });
+
+    return () => socket.off("roomInfo");
+  }, [socket]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size is < 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must be less than 5MB");
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Only image files are allowed");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("photo", file);
+    formData.append("roomId", roomId);
+
+    console.log("Uploading image...");
+
+    try {
+      const res = await axios.post(`${backendUrl}/api/upload/photo`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const data = res.data;
+
+      if (data.success && data.url) {
+        // Emit the image as a chat message
+        socket.emit("sendMessage", {
+          roomId,
+          userName,
+          imageUrl: data.url,
+          timestamp: new Date(),
+        });
+        toast.success("Image uploaded successfully!");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Image upload failed");
+    }
+  };
 
   // Initialize socket
   useEffect(() => {
@@ -46,7 +102,6 @@ const Chatroom = () => {
 
     newSocket.emit("joinRoom", roomId, userName, userId);
 
-    // ✅ Message handlers
     const handleReceiveMessage = (data) => {
       setMessages((prev) => [...prev, data]);
     };
@@ -76,8 +131,6 @@ const Chatroom = () => {
     };
 
     const handleUpdateParticipants = (list) => {
-      console.log("📋 Participants received from server:", list);
-
       // Filter out any null or malformed users
       const validList = (list || []).filter(
         (p) => p && typeof p === "object" && p.name
@@ -90,7 +143,6 @@ const Chatroom = () => {
     };
 
     const handleRoomInfo = (info) => {
-      console.log("Room info received:", info);
       setRoomInfo(info);
     };
 
@@ -99,11 +151,11 @@ const Chatroom = () => {
     };
 
     const handleSessionEnded = () => {
-      alert("Session has ended!");
+      toast.info("Session has ended!");
       navigate("/");
     };
 
-    // ✅ Attach listeners
+    //Attach listeners
     newSocket.on("receiveMessage", handleReceiveMessage);
     newSocket.on("userJoined", handleUserJoined);
     newSocket.on("userLeft", handleUserLeft);
@@ -112,14 +164,14 @@ const Chatroom = () => {
     newSocket.on("sessionTimer", handleSessionTimer);
     newSocket.on("sessionEnded", handleSessionEnded);
 
-    // ✅ NEW: Handle roomFull event
+    //Handle roomFull event
     const handleRoomFull = (data) => {
       toast.error(data.message || "Room is full. Cannot join.");
       navigate("/"); // redirect user to home or previous page
     };
     newSocket.on("roomFull", handleRoomFull);
 
-    // ✅ Cleanup function - remove ALL listeners
+    //Cleanup function - remove ALL listeners
     return () => {
       newSocket.off("receiveMessage", handleReceiveMessage);
       newSocket.off("userJoined", handleUserJoined);
@@ -381,13 +433,25 @@ const Chatroom = () => {
                         {msg.message}
                       </div>
                     ) : msg.userName === userName ? (
+                      // ✅ Your message (on right)
                       <div className="flex justify-end">
                         <div className="max-w-[75%] sm:max-w-md">
-                          <div className="bg-[#9074DB] text-white px-3 sm:px-4 py-2 rounded-2xl rounded-tr-sm">
-                            <p className="text-xs sm:text-sm break-words">
-                              {msg.message}
-                            </p>
-                          </div>
+                          {msg.imageUrl ? (
+                            <div className="flex justify-center">
+                              <img
+                                src={msg.imageUrl}
+                                alt="Uploaded"
+                                className="max-w-30 rounded-lg shadow"
+                              />
+                            </div>
+                          ) : (
+                            <div className="bg-[#9074DB] text-white px-3 sm:px-4 py-2 rounded-2xl rounded-tr-sm">
+                              <p className="text-xs sm:text-sm wrap-break-word">
+                                {msg.message}
+                              </p>
+                            </div>
+                          )}
+
                           <p className="text-xs text-gray-500 mt-1 text-right">
                             {formatTime(msg.timestamp)}
                           </p>
@@ -399,6 +463,7 @@ const Chatroom = () => {
                         />
                       </div>
                     ) : (
+                      // Other user's message (on left)
                       <div className="flex items-start gap-2">
                         <img
                           src="/avatar.png"
@@ -410,9 +475,20 @@ const Chatroom = () => {
                             <p className="text-xs font-medium text-[#9074DB] mb-1">
                               {msg.userName}
                             </p>
-                            <p className="text-xs sm:text-sm text-gray-900 break-words">
-                              {msg.message}
-                            </p>
+
+                            {msg.imageUrl ? (
+                              <div className="flex justify-center">
+                                <img
+                                  src={msg.imageUrl}
+                                  alt="Uploaded"
+                                  className="max-w-xs rounded-lg shadow"
+                                />
+                              </div>
+                            ) : (
+                              <p className="text-xs sm:text-sm text-gray-900 wrap-break-word">
+                                {msg.message}
+                              </p>
+                            )}
                           </div>
                           <p className="text-xs text-gray-500 mt-1">
                             {formatTime(msg.timestamp)}
@@ -429,6 +505,18 @@ const Chatroom = () => {
             {/* Input Area */}
             <div className="border-t border-gray-100 p-3 sm:p-4 bg-white shrink-0">
               <div className="flex items-center w-full gap-2 sm:gap-3">
+                {allowUploads && (
+                  <label htmlFor="photoUpload" className="cursor-pointer">
+                    <Upload className="h-4 sm:h-5 " />
+                    <input
+                      type="file"
+                      id="photoUpload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                )}
                 <input
                   type="text"
                   value={message}
@@ -439,9 +527,9 @@ const Chatroom = () => {
                 />
                 <button
                   onClick={sendMessage}
-                  className="p-2.5 sm:p-3 bg-[#9074DB] text-white rounded-full hover:bg-[#7B5FCA] transition-colors flex items-center justify-center shrink-0"
+                  className="p-2.5 sm:p-2 bg-[#9074DB] text-white rounded-full hover:bg-[#7B5FCA] transition-colors flex items-center justify-center shrink-0"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-3 w-3 sm:h-4 sm:w-4" />
                 </button>
               </div>
             </div>

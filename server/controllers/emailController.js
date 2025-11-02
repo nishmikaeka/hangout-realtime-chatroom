@@ -1,12 +1,16 @@
-// controllers/emailController.js
 import transporter from "../config/nodeMailer.js";
 import roomModel from "../models/roomModel.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// For __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const sendInviteEmail = async (req, res) => {
   const { email } = req.body;
   const { roomId } = req.params;
 
-  // Validation
   if (!email || !roomId) {
     return res.status(400).json({
       success: false,
@@ -14,7 +18,6 @@ export const sendInviteEmail = async (req, res) => {
     });
   }
 
-  // Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({
@@ -24,7 +27,6 @@ export const sendInviteEmail = async (req, res) => {
   }
 
   try {
-    // Fetch room details
     const room = await roomModel.findOne({ roomId }).populate("hostId", "name");
 
     if (!room) {
@@ -38,12 +40,13 @@ export const sendInviteEmail = async (req, res) => {
       process.env.FRONTEND_URL || "http://localhost:5173"
     }/room/${room.roomId}`;
 
-    // ✅ Email template
+    const logoPath = path.join(__dirname, "../assets/full_mono_logo.png");
+
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: `You're invited to join ${
-        room.roomName || "a Hangout session"
+        room.roomName || "a Hangout chatroom session"
       }!`,
       html: `
         <!DOCTYPE html>
@@ -57,16 +60,16 @@ export const sendInviteEmail = async (req, res) => {
             <div style="max-width: 600px; margin: 40px auto; background-color: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
 
               <div style="background: linear-gradient(135deg, #9074DB 0%, #7B5FCA 100%); padding: 40px 20px; text-align: center;">
-                <div style="background-color: white; width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-                  <span style="font-size: 40px;">👋</span>
+                <div style=" width: 80px; height: 100px; margin: 0 auto 20px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                  <img src="cid:hangoutlogo" alt="Hangout Logo" style="width: auto; height: 100px;" />
                 </div>
-                <h1 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">You're Invited!</h1>
+                <h1 style="color: white; margin: 0; font-size: 25px; font-weight: bold;">You're Invited to Hangout Chatroom!</h1>
               </div>
 
               <div style="padding: 40px 30px;">
                 <p style="color: #333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
                   <strong>${
-                    room.hostId?.name || "Someone"
+                    room.hostId?.name || "User"
                   }</strong> has invited you to join a Hangout session:
                 </p>
                 
@@ -113,6 +116,13 @@ export const sendInviteEmail = async (req, res) => {
         </html>
       `,
       text: `You are invited to ${room.roomName} hosted by ${room.hostId?.name}. Room ID: ${room.roomId}. Join here: ${shareableLink}`,
+      attachments: [
+        {
+          filename: "full_logo_mono.svg",
+          path: logoPath,
+          cid: "hangoutlogo",
+        },
+      ],
     };
 
     await transporter.sendMail(mailOptions);

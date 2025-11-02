@@ -34,7 +34,6 @@ const InviteModal = ({ isOpen, onClose, roomInfo }) => {
     setMessage("");
 
     try {
-      // ✅ Updated API call to match your route: POST /api/room/send-invite/:roomId
       const response = await axios.post(
         `http://localhost:4000/api/room/send-invite/${roomInfo.meetingId}`,
         {

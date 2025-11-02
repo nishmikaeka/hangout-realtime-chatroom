@@ -22,7 +22,7 @@ const CreateChatroom = () => {
       // Safety check: If no token exists, the user isn't logged in
       if (!isLoggedIn) {
         toast.error("You must be logged in to create a chatroom.");
-        navigate("/login"); // Redirect to login
+        navigate("/login");
         return;
       }
 
@@ -31,7 +31,7 @@ const CreateChatroom = () => {
         description,
         allowImages,
         duration,
-        maxParticipants,
+        maxParticipants: maxParticipants || 10,
       };
 
       const { data } = await axios.post(
@@ -164,7 +164,7 @@ const CreateChatroom = () => {
               onChange={(e) => setMaxParticipants(e.target.value)}
               className="flex-1 px-3 py-1 w-full rounded-lg mb-1 sm:rounded-xl border border-gray-200 focus:outline-none focus:border-[#9074DB] focus:ring-2 focus:ring-[#9074DB]/20 transition-all text-xs sm:text-sm text-gray-500 bg-white cursor-pointer"
             >
-              <option value="">Max participants</option>
+              <option value="5">Max participants</option>
               <option value="5">5 people</option>
               <option value="10">10 people</option>
               <option value="25">25 people</option>
