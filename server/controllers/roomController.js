@@ -106,7 +106,9 @@ export const joinRoom = async (req, res) => {
   }
 
   try {
-    const room = await roomModel.findOne({ roomId });
+    const room = await roomModel.findOne({
+      roomId: { $regex: new RegExp(`^${roomId}$`, "i") },
+    });
 
     if (!room || room.expiryTime < Date.now()) {
       return res
