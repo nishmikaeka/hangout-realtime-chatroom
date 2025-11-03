@@ -97,7 +97,7 @@ const Chatroom = () => {
 
   // Initialize socket
   useEffect(() => {
-    const newSocket = io("http://localhost:4000");
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL);
     setSocket(newSocket);
 
     newSocket.emit("joinRoom", roomId, userName, userId);

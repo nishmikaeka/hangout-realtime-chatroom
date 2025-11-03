@@ -30,10 +30,13 @@ const JoinRoomModal = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:4000/api/room/join", {
-        userName: userName.trim(),
-        roomId: roomId.trim().toUpperCase(),
-      });
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/room/join",
+        {
+          userName: userName.trim(),
+          roomId: roomId.trim().toUpperCase(),
+        }
+      );
 
       if (response.data.success) {
         // Store user info in localStorage
