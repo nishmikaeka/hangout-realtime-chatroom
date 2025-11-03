@@ -200,5 +200,7 @@ app.use("/api/user", userRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/upload", uploadRouter);
 
+export default app; //vercel config
+
 // -----------------------
 server.listen(port, () => console.log(`Server running on port ${port}`));
