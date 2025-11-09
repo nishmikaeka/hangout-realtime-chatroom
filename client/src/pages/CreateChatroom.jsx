@@ -44,7 +44,7 @@ const CreateChatroom = () => {
 
       if (data.success) {
         toast.success(data.message || "Chatroom created successfully!");
-        navigate(`/chatroom/${data.room.roomId}`);
+        navigate(`/room/${data.room.roomId}`);
       } else {
         toast.error(data.message || "Failed to create the chatroom!");
       }
