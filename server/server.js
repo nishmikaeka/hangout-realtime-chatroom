@@ -204,8 +204,11 @@ app.use("/api/room", roomRouter);
 app.use("/api/upload", uploadRouter);
 
 const __dirname = path.resolve();
+// Serve React static files
 app.use(express.static(path.join(__dirname, "../client/build")));
-app.get(/^\/.*$/, (req, res) => {
+
+// Catch-all: send index.html for all frontend routes
+app.get(/^\/(?!api).*$/, (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
