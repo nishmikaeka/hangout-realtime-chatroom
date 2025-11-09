@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 import http from "http";
 import { Server } from "socket.io";
-
+import path from "path";
 // Routes
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
@@ -202,6 +202,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/upload", uploadRouter);
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
 
 export default app; //vercel config
 
