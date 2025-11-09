@@ -9,7 +9,7 @@ const InviteModal = ({ isOpen, onClose, roomInfo }) => {
 
   if (!isOpen) return null;
 
-  const shareableLink = `${window.location.origin}/chatroom/${roomInfo.meetingId}`;
+  const shareableLink = `${window.location.origin}/room/${roomInfo.meetingId}`;
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
