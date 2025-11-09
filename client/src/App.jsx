@@ -41,7 +41,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/chatroom/:roomId" element={<Chatroom />} />
+        <Route path="/room/:roomId" element={<Chatroom />} />
       </Routes>
     </div>
   );
