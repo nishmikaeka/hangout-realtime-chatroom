@@ -248,7 +248,8 @@ const Chatroom = () => {
             <img
               src="/hangout_black.png"
               alt="Hangout logo"
-              className="h-4 w-auto"
+              className="h-4 w-auto cursor-pointer"
+              onClick={() => navigate("/")}
             />
           </div>
           <div className="flex-1 overflow-y-auto p-4">
@@ -441,7 +442,7 @@ const Chatroom = () => {
                               <img
                                 src={msg.imageUrl}
                                 alt="Uploaded"
-                                className="max-w-30 rounded-lg shadow"
+                                className="max-w-40 rounded-lg shadow"
                               />
                             </div>
                           ) : (
@@ -471,7 +472,11 @@ const Chatroom = () => {
                           className="h-7 sm:h-8"
                         />
                         <div className="max-w-[75%] sm:max-w-md">
-                          <div className="bg-gray-50 px-3 sm:px-4 py-2 rounded-2xl rounded-tl-sm shadow-sm">
+                          <div
+                            className={`px-3 sm:px-4 py-2 rounded-2xl rounded-tl-sm shadow-sm ${
+                              msg.ImageUrl ? "bg-white" : "bg-gray-50"
+                            }`}
+                          >
                             <p className="text-xs font-medium text-[#9074DB] mb-1">
                               {msg.userName}
                             </p>
@@ -481,7 +486,7 @@ const Chatroom = () => {
                                 <img
                                   src={msg.imageUrl}
                                   alt="Uploaded"
-                                  className="max-w-xs rounded-lg shadow"
+                                  className="max-w-40 bg-white rounded-lg shadow"
                                 />
                               </div>
                             ) : (

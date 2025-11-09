@@ -35,7 +35,7 @@ const InviteModal = ({ isOpen, onClose, roomInfo }) => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/chatroom/send-invite/${
+        `${import.meta.env.VITE_BACKEND_URL}/api/room/send-invite/${
           roomInfo.meetingId
         }`,
         {

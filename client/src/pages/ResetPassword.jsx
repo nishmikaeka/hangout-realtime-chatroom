@@ -75,12 +75,12 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#7B68DB] via-[#9074DB] to-[#4A9FD8]">
+    <div className="flex items-center justify-center min-h-screen bg-ghost">
       <img
         onClick={() => navigate("/")}
         src="full_mono_logo.png"
         alt="Hangout Logo"
-        className="absolute left-8 top-8 h-8 cursor-pointer"
+        className="absolute left-8 top-2 h-25 cursor-pointer"
       />
 
       {/* Step 1: Email Input */}
@@ -101,7 +101,7 @@ const ResetPassword = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-2 sm:py-3 mb-6 rounded-xl border border-gray-200 focus:outline-none focus:border-[#9074DB] focus:ring-2 focus:ring-[#9074DB]/20 transition-all text-sm sm:text-base"
+            className="w-full placeholder:text-gray-500 text-gray-600 px-4 py-2 sm:py-3 mb-6 rounded-xl border border-gray-200 focus:outline-none focus:border-[#9074DB] focus:ring-2 focus:ring-[#9074DB]/20 transition-all text-sm sm:text-base"
           />
           <button
             type="submit"
@@ -170,7 +170,7 @@ const ResetPassword = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            className="w-full px-4 py-2 sm:py-3 mb-6 rounded-xl border border-gray-200 focus:outline-none focus:border-[#9074DB] focus:ring-2 focus:ring-[#9074DB]/20 transition-all text-sm sm:text-base"
+            className="w-full px-4 py-2 sm:py-3 mb-6 rounded-xl  border border-gray-200 focus:outline-none focus:border-[#9074DB] focus:ring-2 focus:ring-[#9074DB]/20 transition-all text-sm sm:text-base"
           />
           <button
             type="submit"
