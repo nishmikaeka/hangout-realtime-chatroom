@@ -42,17 +42,22 @@ Built with **simplicity**, **speed**, and **interactivity** in mind — enhanced
 
 ##  Folder Structure
 ![Folder Structure](client/public/FolderStructure.png)
+
 ###  Environment Variables
 
-Create a .env file in the server directory and include the following:
+Create a **`.env`** file in the **`server`** directory and include the following variables:
 
+```bash
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
+
 SMTP_USER=your_smtp_username
 SMTP_PASS=your_smtp_password
 SENDER_EMAIL=your_sender_email
+
 FRONTEND_URL=http://localhost:5173
+
 //cloudinary configs
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
