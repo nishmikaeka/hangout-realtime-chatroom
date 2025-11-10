@@ -41,7 +41,7 @@ Built with **simplicity**, **speed**, and **interactivity** in mind — enhanced
 ---
 
 ##  Folder Structure
-![Folder Structure](client/public/FolderStructure.png)
+![Folder Structure](client/public/Screenshot 2025-11-10 185553.png)
 ###  Environment Variables
 
 Create a .env file in the server directory and include the following:
