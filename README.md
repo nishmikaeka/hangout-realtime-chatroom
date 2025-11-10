@@ -75,20 +75,28 @@ git clone https://github.com/yourusername/hangout-realtime-chatroom.git
 2️⃣ Install dependencies
 
 **Frontend:**
+```bash
 cd client
 npm install
+```
 
 **Backend:**
+```bash
 cd server
 npm install
+```
 
 3️⃣ Run the app locally
 
 **Start the backend:**
+```bash
 npm run dev
+```
 
 **Start the frontend:**
+```bash
 npm run dev
+```
 
 ## About the Project
 
