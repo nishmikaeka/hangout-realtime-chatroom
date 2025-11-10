@@ -1,6 +1,6 @@
 # Hangout — Real-Time Chatroom (MERN Stack)
 
-![Hero Section](/HeroSection.png)
+![Hero Section](client/public/HeroSection.png)
 
 **Hangout** is a full-stack **MERN** real-time chat application where users can create **host-controlled chat rooms** with participant limits, timed sessions, and image uploads — all powered by **Socket.IO**.
 
@@ -41,23 +41,7 @@ Built with **simplicity**, **speed**, and **interactivity** in mind — enhanced
 ---
 
 ##  Folder Structure
-hangout-realtime-chatroom/
-│
-├── client/              # React frontend (Vite)
-│   ├── src/
-│   ├── public/
-│   └── vite.config.js
-|   |__ .env 
-│
-├── server/              # Express backend
-│   ├── routes/
-│   ├── controllers/
-│   ├── models/
-│   ├── config/
-│   ├── utils/
-│   └── server.js
-|   |__ .env
-
+![Folder Structure](client/public/FolderStructure.png)
 ###  Environment Variables
 
 Create a .env file in the server directory and include the following:
