@@ -63,14 +63,15 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-
-- When you deploy your application, you should replace these placeholders with actual, secure values and ensure these sensitive variables are configured as secrets in your hosting environment (e.g., Vercel, Heroku, AWS). Never commit your actual secrets to a public or private repository.
 ```
+- When you deploy your application, you should replace these placeholders with actual, secure values and ensure these sensitive variables are configured as secrets in your hosting environment (e.g., Vercel, Heroku, AWS). Never commit your actual secrets to a public or private repository.
 
 ## Getting Started
 
 1️⃣ Clone the repository
-git clone https://github.com/yourusername/hangout-realtime-chatroom.git
+```bash
+git clone https://github.com/nishmikaeka/hangout-realtime-chatroom.git
+```
 
 2️⃣ Install dependencies
 
